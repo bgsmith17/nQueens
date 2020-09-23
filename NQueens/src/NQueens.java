@@ -1,9 +1,12 @@
+
 import java.util.*;
+import evolutionary_algorithms.Chromosome;
+
 public class NQueens {
 	
 	public static void main(String[] args) {
 		int queens;
-		int[][] population;
+		Chromosome[] population;
 		Scanner kbd = new Scanner(System.in);
 		if(args.length == 1) {
 			try {
@@ -22,24 +25,20 @@ public class NQueens {
 			population = initializePopulation(queens);
 		}
 		
-		population[1][population[1].length-1] = (int)(100*evaluateFitness(population[1]));
-		
-		System.out.println(population[1][population[1].length-1]);
 		kbd.close();
 		return;
 	}//main
 
 
-	public static int[][] initializePopulation(int queens) {
-		int[][] population = new int[queens+1][queens+1];
+	public static Chromosome[] initializePopulation(int queens) {
+		Chromosome[] population = new Chromosome[queens];
 		Random rand = new Random();
 		for(int i = 0; i < queens; i++) {
-			for(int j = 0; j < queens; j++) {
-				population[i][j] = rand.nextInt(queens);
-			}//for j
+			population[i]= new Chromosome(queens);
 		}//for i
 		return population;
-	}//initialize
+	}//init
+		
 	
 	//search the individual for conflicts from left to right, don't double count right to left.
 	public static double evaluateFitness(int[] individual) {
