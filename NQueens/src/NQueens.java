@@ -25,6 +25,13 @@ public class NQueens {
 			population = initializePopulation(queens);
 		}
 		
+		for(int i = 0; i < queens; i ++) {
+			System.out.println("\nSolution");
+			population[i].printSolution();
+			System.out.println("\nFitness");
+			population[i].getFitness();
+		}
+		
 		kbd.close();
 		return;
 	}//main
@@ -32,7 +39,6 @@ public class NQueens {
 
 	public static Chromosome[] initializePopulation(int queens) {
 		Chromosome[] population = new Chromosome[queens];
-		Random rand = new Random();
 		for(int i = 0; i < queens; i++) {
 			population[i]= new Chromosome(queens);
 		}//for i
@@ -41,7 +47,7 @@ public class NQueens {
 		
 	
 	//search the individual for conflicts from left to right, don't double count right to left.
-	public static double evaluateFitness(int[] individual) {
+	/*public static double evaluateFitness(int[] individual) {
 		//updated as conflicts discovered
 		double conflicts = 0;
 	
@@ -68,7 +74,7 @@ public class NQueens {
 		return (1 / (1 + conflicts));
 	}
 
-	
+	*/
 	/*public static void nQueens(int queens) {
 		int[][] population = new int[queens][queens];
 		Random rand = new Random();
