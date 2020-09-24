@@ -35,7 +35,7 @@ public class Chromosome {
 	
 	public void evaluateFitness() {
 		double conflicts = 0;
-		for(int i = 0; i < this.solution.length; i++) {
+		for(int i = 0; i < this.solution.length-1; i++) {
 			if(checkRight(i)) {
 				conflicts++;
 			}
@@ -60,25 +60,28 @@ public class Chromosome {
 		return false;
 	}
 	private boolean checkDiagonalUp(int index){
-		int variance = 1;
 		
-		for(int i = index+1; i < solution.length; i++) {
+		/*for(int i = index+1; i < solution.length; i++) {
 			if((solution[i] + variance < solution.length) && (solution[index] == (solution[i]+variance))){
 				return true;
 			}//if
 			variance++;
-		}//for
+		}//for*/
+		//start checking immediately to the right of specified column 
+		for(int i = index + 1; i < solution.length; i++) {
+			if((solution[index] - index)==(solution[i] - i)){
+				return true;
+			}
+		}
 	
 		return false;
 	}//checkdiagup
 	private boolean checkDiagonalDown(int index){
-		int variance = 1;
 		
 		for(int i = index+1; i < solution.length; i++) {
-			if((solution[i] - variance >= 0) && (solution[index] == (solution[i]+variance))){
+			if((solution[i] + i) == (solution[index]+index)){
 				return true;
 			}//if
-			variance++;
 		}//for
 	
 		return false;
