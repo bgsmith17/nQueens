@@ -3,7 +3,10 @@
 import java.util.*;
 
 
-
+/*the chromosome class contains a representation of a candidate solution to a specified problem
+ * It can track the total number of fitness evaluations (to be used as a halting parameter) 
+ * and contains methods to mutate, crossover, and generate chromosome attributes.
+ */
 public class Chromosome{
 	private static int evaluations;
 	private ArrayList<Node> solution;
