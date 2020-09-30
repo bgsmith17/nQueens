@@ -18,16 +18,6 @@ public class Chromosome{
 		
 	}
 	
-	/*public Chromosome(int queens){
-		
-		this.solution = new ArrayList<Integer>(queens);
-		
-		for(int i = 0; i < queens; i++) {
-			solution.add(i);
-		}
-		
-		this.evaluateFitness();
-	}*/
 	public Chromosome(ArrayList<Node> solution) {
 		this.solution = solution; 
 		Collections.shuffle(this.solution, rand);
@@ -171,9 +161,6 @@ public class Chromosome{
 		return false;
 	}
 
-	/*private Chromosome rouletteSelect(ArrayList<Chromosome> population) {
-		
-	}*/
 	
 	public static ArrayList<Chromosome> tournamentSelect(ArrayList<Chromosome> population){
 		Random rand = new Random();
@@ -224,19 +211,11 @@ public class Chromosome{
 			}
 		}
 	}
-	/*@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}*/
-	
-	/*public int compareTo(Chromosome chrome) {
-		return (int)((this.getEvaluations()*10000) - (chrome.getFitness()*10000));
-	}*/
+
 	
 	public static Comparator<Chromosome> fitnessCompare = new Comparator<Chromosome>() {
 		public int compare(Chromosome c1, Chromosome c2) {
-			return (int)((c2.getFitness()*10000)-(c1.getFitness()*10000));
+			return (int)((c1.getFitness()*10000)-(c2.getFitness()*10000));
 		}
 	};
 }
