@@ -34,12 +34,7 @@ public class NQueens {
 			
 		}
 		
-		/*for(int i = 0; i < queens; i ++) {
-			System.out.println("\nSolution");
-			population[i].printSolution();
-			System.out.println("\nFitness");
-			population[i].getFitness();
-		}*/
+	
 		Collections.sort(population, Chromosome.fitnessCompare);
 		while(Chromosome.getEvaluations() < 1000000 && population.get(0).getFitness() < 1) {
 			matingPool = Chromosome.tournamentSelect(population);
@@ -57,16 +52,7 @@ public class NQueens {
 		}
 		population.get(0).printSolution();
 		System.out.println(population.get(0).getFitness());
-		/*for(Chromosome c: population) {
-			System.out.println(c.getFitness());
-		}
-		
-		for(Chromosome c : matingPool) {
-			c.printSolution();
-			System.out.print(c.getFitness() + "\n\n");
-			
-		}
-		*/
+
 		kbd.close();
 		return;
 	}//main

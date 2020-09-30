@@ -1,4 +1,6 @@
 import java.util.*;
+
+
 import java.io.*;
 public class TSP {
 
@@ -6,6 +8,7 @@ public class TSP {
 	public static void main(String[] args) {
 		Scanner kbd = new Scanner(System.in);
 		ArrayList<Chromosome> population;
+		ArrayList<Chromosome> matingPool;
 		ArrayList<Node> initial = null;
 		String fileName = "TSPDATA.txt";
 		Scanner inputStream = null;
@@ -36,10 +39,26 @@ public class TSP {
 			
 		}
 		Collections.sort(population, Chromosome.fitnessCompare);
+		while(Chromosome.getEvaluations() < 1000000 && population.get(0).getFitness() > 118282) {
+			matingPool = Chromosome.tournamentSelect(population);
+			int index = 0;
+			for(int i = population.size()-1; i > population.size()/2; i--) {
+				if(index > matingPool.size()) {
+					break;
+				}
+				population.set(i, matingPool.get(index));
+				index++;
+			}
+			Collections.sort(population, Chromosome.fitnessCompare);
+			System.out.println(population.get(0).getFitness());
+			
+			//System.out.println(population.get(0).getFitness());
+			//System.out.println(Chromosome.getEvaluations());
 		
-		for(Chromosome c : population) {
-			System.out.println(c.getFitness());
 		}
+		population.get(0).printSolution();
+		System.out.println(population.get(0).getFitness());
+
 	kbd.close();
 		
 	return;

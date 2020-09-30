@@ -40,6 +40,17 @@
 		}
 		//returns the euclidean distance between two nodes.
 		public double computeDistance(Node n) {
+			if(n == null) {
+				System.out.println(this.getNum());
+				System.out.println("Null Node Detected");
+				return 0.0;
+			}
+			/*System.out.print(this.nodeNum + " ");
+			System.out.print(this.x + " ");
+			System.out.print(this.y + "\n");
+			System.out.print(n.nodeNum + " ");
+			System.out.print(n.x + " ");
+			System.out.print(n.y + "\n");*/
 			return Math.sqrt(Math.pow((this.getX() - n.getX()), 2) + Math.pow(this.getY() - n.getY(), 2));		
 		}
 }
