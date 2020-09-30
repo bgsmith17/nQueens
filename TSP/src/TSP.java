@@ -35,7 +35,11 @@ public class TSP {
 			population.add(new Chromosome(initial));
 			
 		}
-		Collections.sort(population, Chromosome.fitnessCompare);		
+		Collections.sort(population, Chromosome.fitnessCompare);
+		
+		for(Chromosome c : population) {
+			System.out.println(c.getFitness());
+		}
 	kbd.close();
 		
 	return;

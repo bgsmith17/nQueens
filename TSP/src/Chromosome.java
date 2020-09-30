@@ -70,7 +70,7 @@ public class Chromosome{
 	
 	private void mutate() {
 		int mutateCheck = rand.nextInt(solution.size());
-		if(mutateCheck >= 6) {
+		if(mutateCheck >= solution.size()*75) {
 			Collections.swap(this.solution, rand.nextInt(this.solution.size()), rand.nextInt(this.solution.size()));
 		}
 	}
