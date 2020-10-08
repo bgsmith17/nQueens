@@ -9,6 +9,12 @@ public class Chromosome{
 	private double fitness;
 	private boolean fitnessChecked = false;
 	private Random rand = new Random();
+	private double selectionAdvantage;
+	private boolean valid;
+	
+	public boolean containsNull() {
+		return this.solution.contains(-1);
+	}
 	
 	public Chromosome() {
 		
@@ -29,7 +35,7 @@ public class Chromosome{
 		this.evaluateFitness();
 	}
 	
-	
+	//returns the fitness of an individual
 	public double getFitness() {
 		if(fitnessChecked) {
 			return this.fitness;
@@ -40,28 +46,29 @@ public class Chromosome{
 		}
 	}
 	
+	//prints the solution
 	public void printSolution() {
 		for(int i = this.solution.size()-1; i >= 0; i--) {
 			int print = solution.indexOf(i);
 			for(int j = 0; j < this.solution.size(); j++) {
 				if(j == print) {
-					System.out.print(" Q ");
+					System.out.print("Q");
 				}
 				else {
-					System.out.print(" . ");
+					System.out.print("  .  ");
 				}
 			}
 			System.out.print("\n");
 		}
 		for(int i = 0; i < this.solution.size(); i++) {
-			System.out.print(" " + solution.get(i) + " ");
+			System.out.print(" " + solution.get(i));
 		} 
 		System.out.print("\n\n");
 	}
 	
 
 	
-	
+	//evaluates the fitness by searching for diagonal conflicts
 	public void evaluateFitness() {
 		double conflicts = 0;
 		for(int i = 0; i < this.solution.size()-1; i++) {
@@ -81,22 +88,8 @@ public class Chromosome{
 	}
 	
 	//checkX methods are all helper methods for evaluateFitness
-	/*private boolean checkRight(int index){ 
-		for(int i = index+1; i < solution.size(); i++) {
-			if(solution.get(i)==solution.get(index)) {
-				return true;
-			}//if
-		}//for
-		return false;
-	}*/
+	//checkDiagonalUp looks for conflicts upwards
 	private boolean checkDiagonalUp(int index){
-		
-		/*for(int i = index+1; i < solution.length; i++) {
-			if((solution[i] + variance < solution.length) && (solution[index] == (solution[i]+variance))){
-				return true;
-			}//if
-			variance++;
-		}//for*/
 		//start checking immediately to the right of specified column 
 		for(int i = index + 1; i < solution.size(); i++) {
 			if((solution.get(index) - index)==(solution.get(i) - i)){
@@ -106,8 +99,8 @@ public class Chromosome{
 	
 		return false;
 	}//checkdiagup
+	//checkDiagonalDown looks for conflicts downwards
 	private boolean checkDiagonalDown(int index){
-		
 		for(int i = index+1; i < solution.size(); i++) {
 			if((solution.get(i) + i) == (solution.get(index)+index)){
 				return true;
@@ -121,19 +114,20 @@ public class Chromosome{
 		return evaluations;
 	}
 	
+	//mutates an individual using swap mutation
 	private void mutate() {
+		//generates a random number
 		int mutateCheck = rand.nextInt(solution.size());
-		if(mutateCheck >= solution.size()*.5) {
+		//50% chance of mutation
+		if(mutateCheck <= solution.size()*.5) {
 			Collections.swap(this.solution, rand.nextInt(this.solution.size()), rand.nextInt(this.solution.size()));
 		}
 	}
-	
+	//crossover operator
 	public static ArrayList<Chromosome> partiallyMappedCrossover(Chromosome p1, Chromosome p2) {
 		Random rand = new Random();
 		ArrayList<Integer> parent1 = p1.solution;
 		ArrayList<Integer> parent2 = p2.solution;
-		//Integer[] parent1 = p1.solution.toArray(new Integer[p1.solution.size()]);
-		//Integer[] parent2 = p2.solution.toArray(new Integer[p2.solution.size()]);
 		ArrayList<Integer> child1 = new ArrayList<Integer>(p1.solution.size());
 		ArrayList<Integer> child2 = new ArrayList<Integer>(p1.solution.size());
 		ArrayList<Chromosome> children = new ArrayList<Chromosome>(2);
@@ -143,58 +137,8 @@ public class Chromosome{
 			child1.add(-1);
 			child2.add(-1);
 		}
-		/*int val1 = 0;
-		int val2 = 0;
-		int swapIndex1 = 0;
-		int swapIndex2 = 0;
-		for(int i = 0; i < p1.solution.size(); i++) {
-			child1.add(-1);
-			child2.add(-1);
-		}
-		int start = rand.nextInt(p1.solution.size());
-		int end = start + rand.nextInt(p1.solution.size()-start);
-		for(int i = 0; i < p1.solution.size(); i++) {
-			child1.set(i, parent1.get(i));
-			child2.set(i, parent2.get(i));
-		}
 		
-		for(int i = start; i <= end; i++) {
-			val1 = parent1.get(i);
-			val2 = parent2.get(i);
-			
-			for(int j = 0; j < p1.solution.size(); j++) {
-				if(child1.get(j) == val1) {
-					swapIndex1 = j;
-				}
-				else if(child1.get(j) == val2) {
-					swapIndex2 = j;
-				}
-			}
-			
-			if(val1 != val2) {
-				child1.set(swapIndex1, val2);
-				child1.set(swapIndex2, val1);
-			}
-			
-			for(int k = 0; k < p1.solution.size(); k++) {
-				if(child2.get(k) == val2) {
-					swapIndex1 = k;
-				}
-				else if(child2.get(k) == val1) {
-					swapIndex2 = k;
-				}
-			}
-			if(val1 != val2) {
-				child2.set(swapIndex1, val1);
-				child2.set(swapIndex2, val1);
-			}
-		}
-		
-		children.add(new Chromosome(child1));
-		children.add(new Chromosome(child2));
-		children.get(0).mutate();
-		children.get(1).mutate();*/
-		
+		//copy a region from parent2 to child 1 and parent1 to child 2
 		for(int i = start; i < end; i++) {
 			if(!child1.contains(parent1.get(i))){
 				child1.set(i, parent2.get(i));
@@ -212,6 +156,8 @@ public class Chromosome{
 				}
 			}
 		}
+		//fills child 1 and child 2 with values from parent 1 and parent2 respectively,
+		//checking to see if there are any unfilled spots and no duplicates as it goes.
 		if(child1.contains(-1)) {
 			for(int i = 0; i < p1.solution.size(); i++) {
 				if(!child1.contains(parent1.get(i))) {
@@ -232,7 +178,7 @@ public class Chromosome{
 				}
 			}
 		}
-		
+		//adds new children to the progeny list, and gives them a chance to mutate
 		children.add(new Chromosome(child1));
 		children.add(new Chromosome(child2));
 		children.get(0).mutate();
@@ -266,10 +212,8 @@ public class Chromosome{
 		return false;
 	}
 
-	/*private Chromosome rouletteSelect(ArrayList<Chromosome> population) {
-		
-	}*/
-	
+
+	//selection for parents to go into mating pool
 	public static ArrayList<Chromosome> tournamentSelect(ArrayList<Chromosome> population){
 		Random rand = new Random();
 		ArrayList<Chromosome> matingPool = new ArrayList<Chromosome>(population.size()/2);
@@ -319,16 +263,8 @@ public class Chromosome{
 			}
 		}
 	}
-	/*@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}*/
-	
-	/*public int compareTo(Chromosome chrome) {
-		return (int)((this.getEvaluations()*10000) - (chrome.getFitness()*10000));
-	}*/
-	
+
+	//utility to compare chromosomes, used for sorting.
 	public static Comparator<Chromosome> fitnessCompare = new Comparator<Chromosome>() {
 		public int compare(Chromosome c1, Chromosome c2) {
 			return (int)((c2.getFitness()*10000)-(c1.getFitness()*10000));
