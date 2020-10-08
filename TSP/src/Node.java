@@ -45,13 +45,15 @@
 				System.out.println("Null Node Detected");
 				return 0.0;
 			}
-			/*System.out.print(this.nodeNum + " ");
-			System.out.print(this.x + " ");
-			System.out.print(this.y + "\n");
-			System.out.print(n.nodeNum + " ");
-			System.out.print(n.x + " ");
-			System.out.print(n.y + "\n");*/
-			return Math.sqrt(Math.pow((this.getX() - n.getX()), 2) + Math.pow(this.getY() - n.getY(), 2));		
+			double distance = 0.0;
+			double xVal = Math.abs(this.x - n.x);
+			double yVal = Math.abs(this.y - n.y);
+			
+			xVal *= xVal;
+			yVal *= yVal;
+			
+			distance = Math.sqrt(xVal+yVal);
+			return distance;
 		}
 }
 

@@ -12,6 +12,7 @@ public class TSP {
 		ArrayList<Node> initial = null;
 		String fileName = "TSPDATA.txt";
 		Scanner inputStream = null;
+		Random rand = new Random();
 		try {
 			inputStream = new Scanner(new File(fileName)).useDelimiter("\\D+");
 			int[] vals = new int[3];
@@ -36,24 +37,24 @@ public class TSP {
 		population = new ArrayList<Chromosome>(popSize);
 		for(int i = 0; i < popSize; i++) {
 			population.add(new Chromosome(initial));
+			population.get(i).evaluateFitness();
 			
 		}
 		Collections.sort(population, Chromosome.fitnessCompare);
 		while(Chromosome.getEvaluations() < 1000000 && population.get(0).getFitness() > 118282) {
-			matingPool = Chromosome.tournamentSelect(population);
-			int index = 0;
-			for(int i = population.size()-1; i > population.size()/2; i--) {
-				if(index > matingPool.size()) {
-					break;
+			ArrayList<Chromosome> children = GeneticAlgorithm.nextGeneration(population);
+			for(int i = 0; i < children.size(); i++) {
+				int index = rand.nextInt(population.size());
+				if(index == 0) {
+					index += rand.nextInt(population.size()/2);
 				}
-				population.set(i, matingPool.get(index));
-				index++;
+				population.set(index, children.get(i));
 			}
 			Collections.sort(population, Chromosome.fitnessCompare);
-			System.out.println(population.get(0).getFitness());
-			
+			System.out.println(Chromosome.getEvaluations());
+			System.out.println(getFittest(population).getFitness());
 			//System.out.println(population.get(0).getFitness());
-			//System.out.println(Chromosome.getEvaluations());
+
 		
 		}
 		population.get(0).printSolution();
@@ -63,4 +64,14 @@ public class TSP {
 		
 	return;
 	}
+	public static Chromosome getFittest(ArrayList<Chromosome> population) {
+		Chromosome fittest = population.get(0);
+		for(int i = 0; i < population.size(); i++) {
+			if (population.get(i).getFitness() < fittest.getFitness()) {
+				fittest = population.get(i);
+			}
+		}
+		return fittest;
+	}
 }
+	

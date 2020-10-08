@@ -21,9 +21,12 @@ public class Chromosome{
 	public Chromosome(ArrayList<Node> solution) {
 		this.solution = solution; 
 		Collections.shuffle(this.solution, rand);
-		this.evaluateFitness();
+		//this.evaluateFitness();
 	}
 	
+	public ArrayList<Node> getSolution(){
+		return this.solution;
+	}
 	
 	public double getFitness() {
 		if(fitnessChecked) {
@@ -41,52 +44,38 @@ public class Chromosome{
 		}
 		System.out.print("\n\n");
 	}
-	
-
-	
-	
+		
 	public void evaluateFitness() {
 		double tourLength = 0;
 		//this.printSolution();
-		for(int i = 0; i < solution.size(); i++) {
-			if(i+1 >= solution.size()) {
-				tourLength += solution.get(i).computeDistance(solution.get(0));
-			}
-			else if(i + 1 < solution.size()) {
-				try {
-					tourLength += solution.get(i).computeDistance(solution.get(i+1));
-				}
-				catch(NullPointerException e) {
-					System.out.println("i = " + i);
-					solution.get(i).printNode();
-				}
-	
-			}
+		Node firstCity = this.solution.get(0);
+		Node lastCity = this.solution.get(solution.size()-1);
+		for(int i = 0; i < solution.size()-2; i++) {
+			tourLength += solution.get(i).computeDistance(solution.get(i+1));
 		}
+		tourLength += lastCity.computeDistance(firstCity);
 		this.fitness = tourLength;
 		evaluations++;
 		fitnessChecked = true;
 	}
 	
-	
-
-	
 	public static int getEvaluations() {
 		return evaluations;
 	}
 	
-	private void mutate() {
+	/*public void mutate() {
 		int mutateCheck = rand.nextInt(5);
+		int start = rand.nextInt(solution.size()/2);
+		int end = start + rand.nextInt(solution.size()-start);
 		switch(mutateCheck) {
 		case 0:
 		case 3:	
-			Collections.swap(this.solution, rand.nextInt(this.solution.size()), rand.nextInt(this.solution.size()));
-			Collections.swap(this.solution, rand.nextInt(this.solution.size()), rand.nextInt(this.solution.size()));
+			
+			Collections.shuffle(this.solution.subList(start, end));
 		break;
 		case 1:
 		case 2:	
-			int start = rand.nextInt(this.solution.size());
-			int end = start + rand.nextInt(this.solution.size()-start);
+		case 4:
 			ArrayList<Node>reverseMe = new ArrayList<Node>(end - start);
 			for(int i = start; i <= end; i ++) {
 				reverseMe.add(this.solution.get(i));
@@ -96,13 +85,12 @@ public class Chromosome{
 				this.solution.set((i+start), reverseMe.get(i));
 			}
 		break;
-		default:
-			return;
 		}
+		this.evaluateFitness();
 		
-	}
+	}*/
 	
-	public static ArrayList<Chromosome> partiallyMappedCrossover(Chromosome p1, Chromosome p2) {
+	/*public static ArrayList<Chromosome> partiallyMappedCrossover(Chromosome p1, Chromosome p2) {
 		//System.out.println("In Crossover");
 		Random rand = new Random();
 		ArrayList<Node> parent1 = p1.solution;
@@ -112,6 +100,12 @@ public class Chromosome{
 		ArrayList<Chromosome> children = new ArrayList<Chromosome>(2);
 		int start = rand.nextInt(p1.solution.size());
 		int end = start + rand.nextInt(p1.solution.size()-start);
+		if((end - start) < 10) {
+			while((end - start) < 10) {
+			start = rand.nextInt(p1.solution.size());
+			end = start + rand.nextInt(p1.solution.size()-start);
+			}
+		}
 		for(int i = 0; i < p1.solution.size(); i++) {
 			child1.add(null);
 			child2.add(null);
@@ -123,14 +117,7 @@ public class Chromosome{
 				child2.set(i, parent1.get(i));
 			
 			
-			/*else {
-				if(!child1.contains(parent1.get(i))) {
-					child1.set(child1.indexOf(null), parent1.get(i));
-				}
-				if(!child2.contains(parent2.get(i))) {
-					child2.set(child2.indexOf(null), parent2.get(i));
-				}
-			}*/
+		
 		}
 		while(child1.contains(null)) {
 			for(int i = 0; i < p1.solution.size(); i++) {
@@ -146,39 +133,20 @@ public class Chromosome{
 				}
 			}
 		}
-		for(int i = 0; i < p1.solution.size(); i++) {
-			if(child1.get(i) == null) {
-				int numprints = 0;
-				System.out.println("Null Node in child 1");
-				for(Node n : child1) {
-					try{
-						n.printNode();
-						numprints++;
-					}
-					catch(NullPointerException e) {
-						System.out.println(numprints);
-					}
-					
-				}
-			}
-			if(child2.get(i) == null) {
-				System.out.println("Null Node in child 2");
-				for(Node n : child2) {
-					n.printNode();
-				}
-			}
-		}
+
 		children.add(new Chromosome(child1));
 		children.add(new Chromosome(child2));
-		children.get(0).mutate();
-		children.get(1).mutate();
+		if(rand.nextInt(10) > 2) {
+			children.get(0).mutate();
+			children.get(1).mutate();
+		}
 		
 
 		
 		return children;
-	}
+	}*/
 	
-	private void setSolution(ArrayList<Node> solution) {
+	void setSolution(ArrayList<Node> solution) {
 		this.solution = solution;
 	}
 	
@@ -202,7 +170,7 @@ public class Chromosome{
 	}
 
 	
-	public static ArrayList<Chromosome> tournamentSelect(ArrayList<Chromosome> population){
+	/*public static ArrayList<Chromosome> tournamentSelect(ArrayList<Chromosome> population){
 		//System.out.println("In Selection");
 		Random rand = new Random();
 		ArrayList<Chromosome> matingPool = new ArrayList<Chromosome>(population.size()/2);
@@ -229,14 +197,14 @@ public class Chromosome{
 		}
 		
 		return children;
-	}
+	}*/
 	
 	public static void evaluatePopulation(ArrayList<Chromosome> population) {
 		for(Chromosome c: population) {
 			c.evaluateFitness();
 		}
 	}
-	private Chromosome selectParent(Chromosome p1, Chromosome p2) {
+	/*private Chromosome selectParent(Chromosome p1, Chromosome p2) {
 		if(p1.getFitness() > p2.getFitness()) {
 			return p1;
 		}
@@ -251,7 +219,7 @@ public class Chromosome{
 				return p2;
 			}
 		}
-	}
+	}*/
 
 	
 	public static Comparator<Chromosome> fitnessCompare = new Comparator<Chromosome>() {
