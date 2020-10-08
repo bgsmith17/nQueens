@@ -2,34 +2,52 @@ package evolutionaryalgos;
 
 import java.util.*;
 
-
+/*each chromosome contains a candidate solution to the nqueens problem
+ To limit how long the algorithm may execute, evaluations has been made static.
+ * 
+ */
 public class Chromosome{
+	//how many chromosomes have been evaluated
 	private static int evaluations;
+	//container for a candidate solutions
+	//each index is an X value and contains a Y value
 	private ArrayList<Integer> solution;
+	//the quality of the candidate solution
 	private double fitness;
+	
+	//has it been checked
 	private boolean fitnessChecked = false;
 	private Random rand = new Random();
 	private double selectionAdvantage;
 	private boolean valid;
 	
+	//are there any empty indices in the solution?
 	public boolean containsNull() {
 		return this.solution.contains(-1);
 	}
 	
+	//default constructor
 	public Chromosome() {
 		
 	}
 	
+	/*single parameter constructor
+	 * @param int queens
+	 * @returns a new Chromosome object
+	 */
 	public Chromosome(int queens){
 		
 		this.solution = new ArrayList<Integer>(queens);
-		
+		//fill the list with the desired number of queens
 		for(int i = 0; i < queens; i++) {
 			solution.add(i);
 		}
+		//shuffle the list
 		Collections.shuffle(solution, rand);
+		//evalute the quality of the resulting solution.
 		this.evaluateFitness();
 	}
+	//single parameter constructor, used only for offspring generation.
 	public Chromosome(ArrayList<Integer> solution) {
 		this.solution = solution;
 		this.evaluateFitness();
